@@ -38,60 +38,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//
-//        self.headerView = HeaderView(frame: CGRect(x: 0, y: self.view.safeAreaInsets.top, width: self.view.frame.width, height: self.view.frame.width*0.9))
-//
-//        self.tableView = UITableView(frame: CGRect(x: 0, y: self.view.safeAreaInsets.top, width: self.view.frame.width, height: self.view.frame.height), style: .grouped)
-//        self.tableView.register(DailyWeatherTableViewCell.self, forCellReuseIdentifier: "dailyCell")
-//        self.tableView.register(StatsTableViewCell.self, forCellReuseIdentifier: "statsCell")
-//        self.tableView.register(DefaultTableViewCell.self, forCellReuseIdentifier: "defaultCell")
-//        self.tableView.backgroundColor = UIColor(white: 0, alpha: 0)
-//        self.tableView.showsVerticalScrollIndicator = false
-//        self.tableView.separatorStyle = .none
-//        self.tableView.allowsSelection = false
-//        self.tableView.contentInset = UIEdgeInsets(top: self.headerView.frame.height, left: 0, bottom: 0, right: 0)
-//
-//        let collectionViewFlowLayout = UICollectionViewFlowLayout()
-//        collectionViewFlowLayout.itemSize = CGSize(width: 40, height: 110)
-//        collectionViewFlowLayout.scrollDirection = .horizontal
-//        self.collectionView = HourlyCollectionView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: 120), collectionViewLayout: collectionViewFlowLayout)
-//        self.collectionView.backgroundColor = .blue
-//
-//        self.tableView.delegate = self
-//        self.tableView.dataSource = self
-//        self.collectionView.delegate = self
-//        self.collectionView.dataSource = self
-//        self.locationManager.delegate = self
-//
-//        self.view.addSubview(self.headerView)
-//        self.view.addSubview(self.collectionView)
-//        self.view.addSubview(self.tableView)
-//        self.tableView.addSubview(self.collectionView)
-//
-//        self.headerView.translatesAutoresizingMaskIntoConstraints = false
-//        self.collectionView.translatesAutoresizingMaskIntoConstraints = false
-//        self.tableView.translatesAutoresizingMaskIntoConstraints = false
-//        self.headerView.clipsToBounds = true
-//        self.collectionView.clipsToBounds = true
-//        self.tableView.clipsToBounds = true
-//        self.headerView.contentMode = .scaleAspectFit
-        
-//        NSLayoutConstraint.activate([
-//            self.headerView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-//            self.headerView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
-//            self.headerView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
-//            self.headerView.heightAnchor.constraint(equalToConstant: self.view.frame.width*0.9),
-            
-//            self.collectionView.topAnchor.constraint(equalTo: self.headerView.bottomAnchor),
-//            self.collectionView.widthAnchor.constraint(equalToConstant: self.view.frame.width),
-//            self.collectionView.heightAnchor.constraint(equalToConstant: 120),
-            
-//            self.tableView.topAnchor.constraint(equalTo: self.collectionView.bottomAnchor),
-//            self.tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
-//            self.tableView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor),
-//            self.tableView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor)
-//        ])
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -128,14 +74,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         self.collectionView.dataSource = self
         self.locationManager.delegate = self
         
-//        self.view.addSubview(self.collectionView)
         self.view.addSubview(self.headerView)
         self.view.addSubview(self.tableView)
         self.tableView.addSubview(self.collectionView)
-    
-//        self.headerView.translatesAutoresizingMaskIntoConstraints = false
-//        self.collectionView.translatesAutoresizingMaskIntoConstraints = false
-//        self.tableView.translatesAutoresizingMaskIntoConstraints = false
+
         self.headerView.clipsToBounds = true
         
         self.locationManager.startUpdatingLocation()
@@ -157,10 +99,14 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 guard let placeMark = placeMark?.first else {
                     return
                 }
-                guard let placeName = placeMark.name else {
-                    return
+                if let placeName = placeMark.locality {
+                    self.cityName = placeName
+                } else if let placeName = placeMark.name {
+                    self.cityName = placeName
+                } else {
+                    self.cityName = ""
                 }
-                self.cityName = placeName
+                
             }
             
             networkManager.getNewWeather(lat: lat, lon: lon, type: .metric, excludeKey: .minutely) { (weatherResponse, error) in
@@ -235,13 +181,11 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         if isCustom {
             if isSunrise {
-//            if sunriseDateTime.hasPrefix(modelHourTime) {
                 cell.hourLabel.text = sunriseDateTime
                 cell.weatherIconImage.image = UIImage(systemName: "sunset.fill")?.withRenderingMode(.alwaysOriginal)
                 cell.tempLabel.text = "Sunrise"
                 return cell
             } else {
-//            if sunsetDateTime.hasPrefix(modelHourTime) {
                 cell.hourLabel.text = sunsetDateTime
                 cell.weatherIconImage.image = UIImage(systemName: "sunset.fill")?.withRenderingMode(.alwaysOriginal)
                 cell.tempLabel.text = "Sunset"

@@ -29,17 +29,14 @@ class HourlyCollectionView: UICollectionView {
         self.addSubview(bottomGrayBreakline)
         NSLayoutConstraint.activate([
             topGrayBreakline.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: -300),
-//            topGrayBreakline.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: 15),
             
             topGrayBreakline.topAnchor.constraint(equalTo: self.topAnchor),
-//            topGrayBreakline.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             topGrayBreakline.widthAnchor.constraint(equalToConstant: 2000),
             topGrayBreakline.heightAnchor.constraint(equalToConstant: 1),
 
             bottomGrayBreakline.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: -300),
             bottomGrayBreakline.widthAnchor.constraint(equalToConstant: 2000),
             bottomGrayBreakline.heightAnchor.constraint(equalToConstant: 1),
-            //someone explain me this behavior of the bottomAnchor
             bottomGrayBreakline.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 120)
         ])
     }
